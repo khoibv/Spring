@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    packages: package contains log4j plugins
+-->
+<Configuration status="error"
+               strict="true"
+               name="Log4j2-XMLConfig"
+               packages="vn.com.khoibv.spring.log4j2demo"
+               monitorInterval="10">
+    <Properties>
+        <Property name="LOG_PATH">E:/Data/Logs</Property>
+        <Property name="FILE_NAME">demo_log4j2</Property>
+        <Property name="FILE_EXTENSION">.log</Property>
+        <Property name="LOG_PATTERN">%date %level{length=5} %class [%thread] %msg%n</Property>
+        <Property name="ROLLING_FILE_NAME_PATTERN">%d{yyyyMMdd}-%i</Property>
+    </Properties>
+    <Filters>
+        <!--<Filter type="ThresholdFilter" level="info" />-->
+    </Filters>
+
+
+    <Appenders>
+        <Console name="STDOUT">
+            <Layout type="PatternLayout" pattern="${LOG_PATTERN}"/>
+        </Console>
+
+        <RollingFile name="RollingFile"
+                     fileName="${LOG_PATH}/${FILE_NAME}${FILE_EXTENSION}"
+                     filePattern="${LOG_PATH}/$${date:yyyyMM}/${FILE_NAME}-${ROLLING_FILE_NAME_PATTERN}${FILE_EXTENSION}">
+            <Layout type="PatternLayout" pattern="${LOG_PATTERN}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="5MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+
+        <RollingFile name="DaoFile"
+                     fileName="${LOG_PATH}/${FILE_NAME}Dao${FILE_EXTENSION}"
+                     filePattern="${LOG_PATH}/$${date:yyyyMM}/${FILE_NAME}Dao-${ROLLING_FILE_NAME_PATTERN}${FILE_EXTENSION}">
+            <Layout type="PatternLayout" pattern="${LOG_PATTERN}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="5MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+
+        <RollingFile name="ServiceFile"
+                     fileName="${LOG_PATH}/${FILE_NAME}Service${FILE_EXTENSION}"
+                     filePattern="${LOG_PATH}/$${date:yyyyMM}/${FILE_NAME}Service-${ROLLING_FILE_NAME_PATTERN}${FILE_EXTENSION}">
+            <Layout type="PatternLayout" pattern="${LOG_PATTERN}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="5MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+
+        <RollingFile name="ControllerFile"
+                     fileName="${LOG_PATH}/${FILE_NAME}Controller${FILE_EXTENSION}"
+                     filePattern="${LOG_PATH}/$${date:yyyyMM}/${FILE_NAME}Controller-${ROLLING_FILE_NAME_PATTERN}${FILE_EXTENSION}">
+            <Layout type="PatternLayout" pattern="${LOG_PATTERN}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="5MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+
+        <JDBC name="databaseAppender" tableName="operation_log">
+            <!--<DataSource jndiName="java:/comp/env/jdbc/LoggingDataSource" />-->
+            <DriverManager>
+                <connectionString>jdbc:h2:mem:testdb</connectionString>
+                <userName>sa</userName>
+                <password></password>
+                <driverClassName>org.h2.Driver</driverClassName>
+            </DriverManager>
+            <Column name="eventDate" isEventTimestamp="true" />
+            <Column name="level" pattern="%level" />
+            <Column name="logger" pattern="%logger" />
+            <Column name="message" pattern="%message" />
+            <Column name="exception" pattern="%ex{full}" />
+        </JDBC>
+
+        <Routing name="ROUTING_APPENDER">
+            <Routes pattern="$${marker:}">
+                <Route key="DAO" ref="DaoFile" />
+                <Route key="SERVICE" ref="ServiceFile"/>
+                <Route key="CONTROLLER" ref="ControllerFile"/>
+            </Routes>
+        </Routing>
+    </Appenders>
+
+    <Loggers>
+        <Logger name="vn.com.khoibv.spring.log4j2demo" level="debug" additivity="false">
+            <AppenderRef ref="ROUTING_APPENDER"/>
+            <AppenderRef ref="STDOUT"/>
+        </Logger>
+
+        <Root level="info">
+            <AppenderRef ref="STDOUT"/>
+            <AppenderRef ref="ROUTING_APPENDER"/>
+        </Root>
+    </Loggers>
+
+</Configuration>
