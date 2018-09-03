@@ -1,0 +1,30 @@
+USE [master]
+GO
+
+/****** Object:  Database [jta]    ******/
+CREATE DATABASE [jta]
+ CONTAINMENT = NONE
+ ON  PRIMARY
+( NAME = N'jta', SIZE = 8192KB , MAXSIZE = UNLIMITED, FILEGROWTH = 65536KB )
+ LOG ON
+( NAME = N'jta_log', SIZE = 8192KB , MAXSIZE = 2048GB , FILEGROWTH = 65536KB )
+GO
+
+USE [jta]
+GO
+/****** Object:  Table [dbo].[coupon] ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[coupon](
+	[id] [bigint] IDENTITY(1,1) NOT NULL,
+	[userid] [bigint] NOT NULL,
+	[type] [nvarchar](32) NOT NULL,
+	[value] [int] NOT NULL,
+ CONSTRAINT [PK_coupon] PRIMARY KEY CLUSTERED
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
