@@ -1,0 +1,56 @@
+package vn.com.khoibv.springsessiondemo.form;
+
+import javax.validation.constraints.NotEmpty;
+import vn.com.khoibv.springsessiondemo.validator.UserUpdatedGroup;
+
+public class UserForm {
+
+  private int id;
+
+  @NotEmpty
+  private String name;
+
+  @NotEmpty
+  private String email;
+
+  @NotEmpty(groups = {UserUpdatedGroup.class})
+  private String address;
+
+
+  @Override
+  public String toString() {
+    return String.format("{id: %s, name: %s}", id, name);
+  }
+
+  public int getId() {
+    return id;
+  }
+
+  public void setId(int id) {
+    this.id = id;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public String getEmail() {
+    return email;
+  }
+
+  public void setEmail(String email) {
+    this.email = email;
+  }
+
+  public String getAddress() {
+    return address;
+  }
+
+  public void setAddress(String address) {
+    this.address = address;
+  }
+}

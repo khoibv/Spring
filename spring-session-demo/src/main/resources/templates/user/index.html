@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/main}">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Title</title>
+</head>
+<body>
+<th:block layout:fragment="content">
+  <h3>User list</h3>
+  <table class="table table-responsive table-sm">
+    <thead>
+    <tr>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Address</th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="user : ${users}">
+      <td th:text="${user.name}"></td>
+      <td th:text="${user.email}"></td>
+      <td th:text="${user.address}"></td>
+      <td><a th:href="@{/user/update(id=${user.id})}" th:text="#{common.update}"></a></td>
+    </tr>
+    </tbody>
+  </table>
+  <div class="button-panel">
+    <button class="btn btn-primary" name="addUser">Add new user</button>
+  </div>
+  <div class="session-info">
+    <p th:text="${'Session ID: ' + sessionId}"></p>
+    <p th:text="${'IP address: ' + ipaddress}"></p>
+    <p th:text="${'Host name: ' + hostname}"></p>
+  </div>
+</th:block>
+<th:block layout:fragment="custom-js">
+  <script th:src="@{/js/app/user.js}" type="text/javascript"></script>
+  <script type="text/javascript" th:inline="javascript">
+    app.user = {};
+    app.user.urls = {
+      insert: /*[[@{user/insert}]]*/ null,
+    }
+  </script>
+</th:block>
+</body>
+</html>

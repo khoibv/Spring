@@ -1,0 +1,27 @@
+version: "3.2"
+services:
+  web:
+    image: maven:3.5.3-jdk-8-slim
+    ports:
+      - target: 8080
+        published: 8080
+        protocol: tcp
+        mode: ingress
+    volumes:
+      - $HOME/.m2:/root/.m2
+      - .:/www
+    working_dir: /www
+    depends_on:
+      - redis
+    command: mvn spring-boot:run
+    deploy:
+      # Run 2 instances under docker swarm
+      replicas: 2
+    networks:
+      - demo-net
+  redis:
+    image: redis
+    networks:
+      - demo-net
+networks:
+  demo-net:
