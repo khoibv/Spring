@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/main}">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<th:block layout:fragment="content" th:with="isUpdated=${userForm.id > 0}">
+  <form th:object="${userForm}" method="post" th:action="${isUpdated} ? @{/user/update} : @{/user/insert}">
+    <div class="message-area">
+      <ul th:if="${#fields.hasErrors('*')}">
+        <li th:each="err : ${#fields.errors('*')}" th:text="${err}">Input is incorrect</li>
+      </ul>
+    </div>
+    <input type="hidden" th:value="*{id}" name="id"/>
+    <div class="form-group row">
+      <label for="name" class="col-sm-2">Name:</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" id="name" name="name" th:value="*{name}" th:errorclass="error">
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="email" class="col-sm-2">Email:</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" id="email" name="email" th:value="*{email}" th:errorclass="error">
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="address" class="col-sm-2">Address:</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" id="address" name="address" th:value="*{address}" th:errorclass="error">
+      </div>
+    </div>
+    <div class="button-panel">
+      <input type="submit" class="btn btn-primary" th:value="${isUpdated} ? #{common.update} : #{common.insert}"></input>
+      <input type="button" class="btn btn-primary" value="Back to list" name="backToList"></input>
+    </div>
+  </form>
+
+
+</th:block>
+<th:block layout:fragment="custom-js">
+  <script th:src="@{/js/app/user.js}" type="text/javascript"></script>
+  <script type="text/javascript" th:inline="javascript">
+    app.user = {};
+    app.user.urls = {
+      index: /*[[@{user}]]*/ null,
+    }
+  </script>
+</th:block>
+</body>
+</html>
